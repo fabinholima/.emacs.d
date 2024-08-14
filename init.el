@@ -141,6 +141,7 @@ Otherwise the startup will be very slow."
 (require 'init-utils)
 
 ;; Programming
+(require 'init-tex)
 (require 'init-vcs)
 (require 'init-check)
 (require 'init-lsp)
