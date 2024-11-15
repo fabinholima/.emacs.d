@@ -61,7 +61,7 @@
 (setq frame-title-format '("Centaur Emacs - %b")
       icon-title-format frame-title-format)
 
-(when (and sys/mac-ns-p sys/mac-x-p)
+(when (or sys/mac-ns-p sys/mac-port-p)
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-hook 'server-after-make-frame-hook
@@ -69,11 +69,16 @@
               (if (display-graphic-p)
                   (menu-bar-mode 1)
                 (menu-bar-mode -1))))
-  (add-hook 'after-load-theme-hook
-            (lambda ()
-              (let ((bg (frame-parameter nil 'background-mode)))
-                (set-frame-parameter nil 'ns-appearance bg)
-                (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
+
+  (defun refresh-ns-appearance ()
+    "Refresh frame parameter ns-appearance."
+    (let ((bg (frame-parameter nil 'background-mode)))
+      (set-frame-parameter nil 'ns-appearance bg)
+      (setcdr (assq 'ns-appearance default-frame-alist) bg)))
+  (add-hook 'after-load-theme-hook #'refresh-ns-appearance)
+  (with-eval-after-load'auto-dark
+   (add-hook 'auto-dark-dark-mode-hook #'refresh-ns-appearance)
+   (add-hook 'auto-dark-light-mode-hook #'refresh-ns-appearance)))
 
 ;; Theme
 (if (centaur-compatible-theme-p centaur-theme)
@@ -282,7 +287,10 @@
 ;; Show line numbers
 (use-package display-line-numbers
   :ensure nil
-  :hook ((prog-mode yaml-mode yaml-ts-mode conf-mode) . display-line-numbers-mode)
+  :hook ((prog-mode
+          conf-mode toml-ts-mode
+          yaml-mode yaml-ts-mode)
+         . display-line-numbers-mode)
   :init (setq display-line-numbers-width-start t))
 
 ;; Suppress GUI features

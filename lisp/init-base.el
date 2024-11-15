@@ -100,7 +100,6 @@
 (set-next-selection-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
 (setq system-time-locale "C")
 (if sys/win32p
@@ -174,7 +173,7 @@
   (with-no-warnings
     (defun my-list-processes--prettify ()
       "Prettify process list."
-      (when-let ((entries tabulated-list-entries))
+      (when-let* ((entries tabulated-list-entries))
         (setq tabulated-list-entries nil)
         (dolist (p (process-list))
           (when-let* ((val (cadr (assoc p entries)))
