@@ -1,6 +1,6 @@
 ;;; init-completion.el --- Initialize completion configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2016-2024 Vincent Zhang
+;; Copyright (C) 2016-2025 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -42,9 +42,10 @@
   :after orderless
   :autoload pinyinlib-build-regexp-string
   :init
-  (defun completion--regex-pinyin (str)
+  (defun orderless-regexp-pinyin (str)
+    "Match COMPONENT as a pinyin regex."
     (orderless-regexp (pinyinlib-build-regexp-string str)))
-  (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+  (add-to-list 'orderless-matching-styles 'orderless-regexp-pinyin))
 
 (use-package vertico
   :custom (vertico-count 15)
@@ -295,6 +296,7 @@ targets."
                 :around #'embark-hide-which-key-indicator)))
 
 (use-package embark-consult
+  :after embark consult
   :bind (:map minibuffer-mode-map
          ("C-c C-o" . embark-export))
   :hook (embark-collect-mode . consult-preview-at-point-mode))

@@ -1,6 +1,6 @@
 ;; init-custom.el --- Define customizations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2024 Vincent Zhang
+;; Copyright (C) 2006-2025 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -154,8 +154,8 @@ For example:
   :type '(alist :key-type (string :tag "Time")
                 :value-type (symbol :tag "Theme")))
 
-(defcustom centaur-system-themes '((light . doom-one-light)
-				                   (dark  . doom-one))
+(defcustom centaur-system-themes '((dark  . doom-one)
+                                   (light . doom-one-light))
   "List of themes related the system appearance.
 
 It's only available on macOS currently."
@@ -183,6 +183,11 @@ It's only available on macOS currently."
   :group 'centaur
   :type '(choice (const :tag "Minibuffer" minibuffer)
                  (const :tag "Child Frame" childframe)))
+
+(defcustom centaur-frame-maximized-on-startup nil
+  "Maximize frame on startup or not."
+  :group 'centaur
+  :type 'boolean)
 
 (defcustom centaur-dashboard (not (daemonp))
   "Display dashboard at startup or not.

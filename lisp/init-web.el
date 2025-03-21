@@ -1,6 +1,6 @@
 ;; init-web.el --- Initialize web configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2016-2024 Vincent Zhang
+;; Copyright (C) 2016-2025 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -95,12 +95,13 @@
 (when (executable-find "prettier")
   (use-package prettier
     :diminish
-    :hook ((js-mode css-mode sgml-mode web-mode) . prettier-mode)
+    :hook ((js-base-mode css-mode sgml-mode web-mode) . prettier-mode)
     :init (setq prettier-pre-warm 'none)))
 
 ;; Typescript
-(use-package typescript-mode
-  :mode ("\\.ts[x]\\'" . typescript-mode))
+(unless (and (centaur-treesit-available-p)
+             (fboundp 'typescript-ts-mode))
+  (use-package typescript-mode))
 
 ;; Major mode for CoffeeScript code
 (use-package coffee-mode
@@ -116,7 +117,7 @@
 
 ;; Adds node_modules/.bin directory to `exec_path'
 (use-package add-node-modules-path
-  :hook ((web-mode js-mode) . add-node-modules-path))
+  :hook ((web-mode js-base-mode) . add-node-modules-path))
 
 (use-package haml-mode)
 (use-package php-mode)

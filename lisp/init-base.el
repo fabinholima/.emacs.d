@@ -1,6 +1,6 @@
 ;; init-base.el --- Better default configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2024 Vincent Zhang
+;; Copyright (C) 2006-2025 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -217,8 +217,11 @@
 
 ;; Frame
 (when (display-graphic-p)
+  ;; Frame maximized on startup
+  (when centaur-frame-maximized-on-startup
+    (add-hook 'window-setup-hook #'centaur-frame-maximize))
+
   ;; Frame fullscreen
-  (add-hook 'window-setup-hook #'fix-fullscreen-cocoa)
   (bind-key "S-s-<return>" #'toggle-frame-fullscreen)
   (and sys/mac-x-p (bind-key "C-s-f" #'toggle-frame-fullscreen))
 
