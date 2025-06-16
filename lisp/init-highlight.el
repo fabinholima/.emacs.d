@@ -45,9 +45,9 @@
   :ensure nil
   :custom-face
   (show-paren-match ((((class color) (background light))
-                      (:box (:line-width (-1 . -1) :color "gray70")))
+                      (:box (:line-width (-1 . -1) :color "gray73")))
                      (((class color) (background dark))
-                      (:box (:line-width (-1 . -1) :color "gray50")))))
+                      (:box (:line-width (-1 . -1) :color "gray56")))))
   :hook (after-init . show-paren-mode)
   :init (setq show-paren-when-point-inside-paren t
               show-paren-when-point-in-periphery t)
@@ -122,7 +122,7 @@ FACE defaults to inheriting from default and highlight."
          ("M-P" . symbol-overlay-switch-backward)
          ("M-C" . symbol-overlay-remove-all)
          ([M-f3] . symbol-overlay-remove-all))
-  :hook (((prog-mode yaml-mode) . symbol-overlay-mode)
+  :hook (((prog-mode yaml-mode yaml-ts-mode) . symbol-overlay-mode)
          (iedit-mode            . turn-off-symbol-overlay)
          (iedit-mode-end        . turn-on-symbol-overlay))
   :init (setq symbol-overlay-idle-time 0.3)
@@ -137,7 +137,7 @@ FACE defaults to inheriting from default and highlight."
     (defun turn-on-symbol-overlay (&rest _)
       "Turn on symbol highlighting."
       (interactive)
-      (when (derived-mode-p 'prog-mode 'yaml-mode)
+      (when (derived-mode-p 'prog-mode 'yaml-mode 'yaml-ts-mode)
         (symbol-overlay-mode 1)))
 
     (advice-add #'activate-mark :after #'turn-off-symbol-overlay)

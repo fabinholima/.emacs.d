@@ -30,6 +30,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'init-const))
+
 ;; Display available keybindings in popup
 (use-package which-key
   :diminish
@@ -260,6 +263,7 @@
 ;; Misc
 (use-package disk-usage)
 (use-package memory-usage)
+(use-package reveal-in-folder)
 
 (use-package list-environment
   :init
@@ -275,10 +279,6 @@
                              `(,val face font-lock-string-face)))))
               process-environment))
     (advice-add #'list-environment-entries :override #'my-list-environment-entries)))
-
-(unless sys/win32p
-  (use-package daemons)                 ; system services/daemons
-  (use-package tldr))
 
 (provide 'init-utils)
 

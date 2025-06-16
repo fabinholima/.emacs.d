@@ -50,8 +50,8 @@
 ;; Initial frame
 (setq initial-frame-alist '((top . 0.5)
                             (left . 0.5)
-                            (width . 0.628)
-                            (height . 0.8)
+                            (width . 0.7)
+                            (height . 0.85)
                             (fullscreen)))
 
 ;; Logo
@@ -265,7 +265,7 @@
 (use-package hide-mode-line
   :hook (((treemacs-mode
            eshell-mode shell-mode
-           term-mode vterm-mode
+           term-mode vterm-mode eat-mode
            embark-collect-mode
            lsp-ui-imenu-mode
            pdf-annot-list-mode) . turn-on-hide-mode-line-mode)
@@ -345,12 +345,6 @@
             (package-vc-install "https://github.com/jdtsmith/ultra-scroll"))
     :hook (after-init . ultra-scroll-mode)))
 
-;; Smooth scrolling over images
-(unless emacs/>=30p
-  (use-package iscroll
-    :diminish
-    :hook (image-mode . iscroll-mode)))
-
 ;; Use fixed pitch where it's sensible
 (use-package mixed-pitch
   :diminish)
@@ -362,31 +356,8 @@
   :config (dolist (mode '(dashboard-mode emacs-news-mode))
             (add-to-list 'page-break-lines-modes mode)))
 
-(when (childframe-workable-p)
-  ;; Child frame
-  (use-package posframe
-    :hook (after-load-theme . posframe-delete-all)
-    :init
-    (defface posframe-border
-      `((t (:inherit region)))
-      "Face used by the `posframe' border."
-      :group 'posframe)
-    (defvar posframe-border-width 2
-      "Default posframe border width.")
-    :config
-    (with-no-warnings
-      (defun my-posframe--prettify-frame (&rest _)
-        (set-face-background 'fringe nil posframe--frame))
-      (advice-add #'posframe--create-posframe :after #'my-posframe--prettify-frame)
-
-      (defun posframe-poshandler-frame-center-near-bottom (info)
-        (cons (/ (- (plist-get info :parent-frame-width)
-                    (plist-get info :posframe-width))
-                 2)
-              (/ (+ (plist-get info :parent-frame-height)
-                    (* 2 (plist-get info :font-height)))
-                 2)))))
-
+;; Transient
+(when (childframe-completion-workable-p)
   ;; Display transient in child frame
   (use-package transient-posframe
     :diminish
@@ -400,6 +371,7 @@
                 transient-posframe-parameters '((left-fringe . 8)
                                                 (right-fringe . 8)))))
 
+;; For macOS
 (with-no-warnings
   (when sys/macp
     ;; Render thinner fonts
